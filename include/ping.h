@@ -1,8 +1,14 @@
 #ifndef PING_PING_H
 #define PING_PING_H
 
-void ping(char* userInput);
+#include <stdbool.h>
 
-void isIpAddress(char* userInput);
+void ping(char* input);
+
+bool isIpAddress(char* input);
+
+bool isURL(char* input);
+
+char* convertIntoIpAddress(char* url);
 
 #endif //PING_PING_H

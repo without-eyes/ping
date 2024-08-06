@@ -1,15 +1,18 @@
 CC = gcc
-CFLAGS = -o -g -Wall
+CFLAGS = -g -Wall -I$(IDIR) -o
 
-SOURCES = ./src/*.c
+IDIR = ./include/
+SRCDIR = ./src/
+
+SOURCES = $(SRCDIR)*.c
 
 .PHONY: all
 .SILENT: all
 
-all: ping
+all: clean myping
 
-%:
+myping:
 	$(CC) $(SOURCES) $(CFLAGS) $@
 
 clean:
-	rm -f $@
+	rm -f ./myping
