@@ -25,10 +25,8 @@ void ping(char* input) {
     char* ip;
     if (isIpAddress(input)) {
         ip = input;
-        puts("ip");
     } else if (isURL(input)) {
         ip = convertIntoIpAddress(input);
-        printf("url: %s\n", ip);
     } else {
         puts("Bad input!");
         return;
@@ -69,13 +67,10 @@ bool isURL(char* input) {
     return isURL;
 }
 
-//char* convertIntoIpAddress(char* url) {
-//    int hostname = gethostname(url, sizeof(url));
-//    if (hostname == -1) return NULL;
-//
-//    struct hostent *host_entry = gethostbyname(url);
-//    if (host_entry == NULL) return NULL;
-//
-//    char* ipBuffer = inet_ntoa(*((struct in_addr*)host_entry->h_addr_list[0]));
-//    return ipBuffer;
-//}
+char* convertIntoIpAddress(char* url) {
+    struct hostent *host_entry = gethostbyname(url);
+    if (host_entry == NULL) return NULL;
+
+    char* ipBuffer = inet_ntoa(*((struct in_addr*)host_entry->h_addr_list[0]));
+    return ipBuffer;
+}
