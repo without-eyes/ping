@@ -1,5 +1,6 @@
 #include "../include/ping.h"
 #include <stdio.h>
+#include <stdlib.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
@@ -7,6 +8,7 @@
 #include <ctype.h>
 #include <unistd.h>
 #include <netdb.h>
+#include <signal.h>
 
 /* Example of message:
 Pinging google.com [142.251.214.142] with 32 bytes of data:
@@ -20,6 +22,8 @@ Ping statistics for 142.251.214.142:
 Approximate round trip times in milli-seconds:
     Minimum = 13ms, Maximum = 15ms, Average = 14ms
 */
+
+int loopValue = 1;
 
 void ping(char* input) {
     char* ip;
@@ -37,7 +41,11 @@ void ping(char* input) {
         return;
     }
 
-    int pingSocket = socket(AF_INET, SOCK_RAW, 0);
+    int pingSocket = socket(AF_INET, SOCK_RAW, IPPROTO_ICMP);
+
+
+    signal(SIGINT, exitHandler); // check if user pressed Ctrl+C
+
 
 //    struct sockaddr_in destinationAddress;
 //    destinationAddress.sin_family = AF_INET;
@@ -55,7 +63,7 @@ void ping(char* input) {
 //    printf("Response from the server: %s\n", response);
 //    close(client_socket);
 
-    // send packets(loop of 4(or maybe more) echo requests)
+    // send packets(loop of infinite echo requests)
     // mark the time
     // if:
     // 1) host available - receive respond;
@@ -96,4 +104,8 @@ char* convertIntoIpAddress(char* url) {
 
     char* ipBuffer = inet_ntoa(*((struct in_addr*)host_entry->h_addr_list[0]));
     return ipBuffer;
+}
+
+void  exitHandler(int dummy) {
+    loopValue = 0;
 }
