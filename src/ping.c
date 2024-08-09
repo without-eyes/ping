@@ -23,14 +23,37 @@ Approximate round trip times in milli-seconds:
 
 void ping(char* input) {
     char* ip;
+
     if (isIpAddress(input)) {
         ip = input;
     } else if (isURL(input)) {
         ip = convertIntoIpAddress(input);
+        if (ip == NULL) {
+            fprintf(stderr, "%s", "Bad URL!\n");
+            return;
+        }
     } else {
-        puts("Bad input!");
+        fprintf(stderr, "%s", "Bad input!\n");
         return;
     }
+
+    int pingSocket = socket(AF_INET, SOCK_RAW, 0);
+
+//    struct sockaddr_in destinationAddress;
+//    destinationAddress.sin_family = AF_INET;
+//    destinationAddress.sin_port = htons(80);
+//    inet_aton(address, &remote_address.sin_addr.s_addr);
+//
+//    connect(client_socket, (struct sockaddr*) &remote_address, sizeof(remote_address));
+//
+//    char request[] = "GET / HTTP/1.1\r\n\r\n";
+//    char response[4096];
+//
+//    send(client_socket, request, sizeof(request), 0);
+//    recv(client_socket, &response, sizeof(response), 0);
+//
+//    printf("Response from the server: %s\n", response);
+//    close(client_socket);
 
     // send packets(loop of 4(or maybe more) echo requests)
     // mark the time
